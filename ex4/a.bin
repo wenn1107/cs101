@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main()
+{
+    int a[] = {0,1,2};
+    char b[] = "ABC";
+    float c[] = {1.1,1.2,1.3};
+    return 0;
+}
