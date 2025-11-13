@@ -19,45 +19,20 @@ void init_file() {
     }
 }
 
+
+
+
+
+
+
 int get_counter() {
     int read_array[1];
     FILE* tmpfp = fopen(COUNTER_FILE, "rb");
     fread(read_array, sizeof(int), 1, tmpfp);
     fclose(tmpfp);
-    return read_array;
+    return read_array[0];
 }
 
-void do_lotto_main(int counter) {
-    char lotto_file[32];
-    snprintf(lotto_file, 32, "lotto[%05d].txt", counter);
-    printf("歡迎光臨長庚樂透彩購買機台\n");
-    printf("請問你要買幾組樂透彩：");
-    scanf("%d", &numset);
-    print_lottofile(num_set, counter, lotto_file);
-    printf("已為您購買的 %d 組樂透組合輸出至 %s\n", num_set, lotto_file);
-}
-
-void print_lottofile(int num_set, int counter, char lotto_file[]){
-    time_t curtime;
-    time(&curtime);
-    srand(time(0));
-    
-    FILE* tmpfp = fopen(lotto_file, "w+");
-    fprintf(tmpfp, "========= lotto649 =========\n");
-    fprintf(tmpfp, "========+ No.%05d +========\n", counter);
-    fprintf(tmpfp, "= %.*s =\n", 24, ctime(&curtime));
-    
-    for (int i=0; i<MAX_LOTTO_NUMSET;i++) {
-        if (i < num_set) {
-            print_lotto_row(tmpfp, i+1);
-        } else {
-            fprintf(tmpfp, "[%d]: -- -- -- -- -- -- --\n",i+1);
-        }
-    }
-    
-    fprintf(tmpfp, "========= csie@CGU =========\n");
-    fclose(tmpfp);
-}
 
 int num_in_numset(int num, int numset[], int Len) {
     int ret = 0;
@@ -113,6 +88,39 @@ void print_lotto_row(FILE* tmpfp, int n) {
     fprintf(tmpfp, "\n");
 }
 
+void print_lottofile(int num_set, int counter, char lotto_file[]){
+    time_t curtime;
+    time(&curtime);
+    srand(time(0));
+    
+    FILE* tmpfp = fopen(lotto_file, "w+");
+    fprintf(tmpfp, "========= lotto649 =========\n");
+    fprintf(tmpfp, "========+ No.%05d +========\n", counter);
+    fprintf(tmpfp, "= %.*s =\n", 24, ctime(&curtime));
+    
+    for (int i=0; i<MAX_LOTTO_NUMSET;i++) {
+        if (i < num_set) {
+            print_lotto_row(tmpfp, i+1);
+        } else {
+            fprintf(tmpfp, "[%d]: -- -- -- -- -- -- --\n",i+1);
+        }
+    }
+    
+    fprintf(tmpfp, "========= csie@CGU =========\n");
+    fclose(tmpfp);
+}
+
+void do_lotto_main(int counter) {
+    char lotto_file[32];
+    int num_set = 0;
+    snprintf(lotto_file, 32, "lotto[%05d].txt", counter);
+    printf("歡迎光臨長庚樂透彩購買機台\n");
+    printf("請問你要買幾組樂透彩：");
+    scanf("%d", &num_set);
+    print_lottofile(num_set, counter, lotto_file);
+    printf("已為您購買的 %d 組樂透組合輸出至 %s\n", num_set, lotto_file);
+}
+
 void set_counter(int counter) {
     int write_array[1];
     write_array[0] = counter;
@@ -131,4 +139,3 @@ int main()
     set_counter(counter);
     return 0;
 }
-
